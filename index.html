@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Your Free Mortgage Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f0e0c;
+      --cream: #f5f0e8;
+      --gold: #b8913a;
+      --gold-light: #d4aa5a;
+      --muted: #7a7060;
+      --border: rgba(184,145,58,0.25);
+      --field-bg: rgba(255,255,255,0.6);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Subtle grain + geometric background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 0%, rgba(184,145,58,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 90% 100%, rgba(184,145,58,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .page-wrap {
+      width: 100%;
+      max-width: 620px;
+      position: relative;
+    }
+
+    /* Decorative rule */
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+    .eyebrow-line {
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.4;
+    }
+    .eyebrow-text {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+
+    /* Card */
+    .card {
+      background: rgba(255,252,245,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 36px 40px;
+      box-shadow: 0 2px 40px rgba(15,14,12,0.08), 0 1px 3px rgba(184,145,58,0.1);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+
+    @media(max-width: 520px) {
+      .card { padding: 28px 22px; }
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    label .req { color: var(--gold); margin-left: 2px; }
+
+    input, select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+      background: var(--field-bg);
+      border: 1px solid rgba(184,145,58,0.2);
+      border-radius: 3px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+    }
+    input::placeholder { color: rgba(122,112,96,0.45); font-weight: 300; }
+    input:focus, select:focus {
+      border-color: var(--gold);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(184,145,58,0.1);
+    }
+
+    /* Custom select arrow */
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0; height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--gold);
+      pointer-events: none;
+    }
+    select { padding-right: 36px; cursor: pointer; }
+
+    /* Divider between sections */
+    .section-divider {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0;
+    }
+    .section-divider span {
+      font-size: 9.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .section-divider::before, .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Submit */
+    .submit-row { grid-column: 1 / -1; margin-top: 6px; }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--gold);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    button[type="submit"]:hover {
+      background: var(--gold-light);
+      box-shadow: 0 4px 20px rgba(184,145,58,0.35);
+      transform: translateY(-1px);
+    }
+    button[type="submit"]:active { transform: translateY(0); }
+    button[type="submit"]:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .privacy {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 300;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+    .privacy a { color: var(--gold); text-decoration: none; }
+
+    /* Success / Error states */
+    .toast {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 3px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      animation: fadeUp 0.4s ease;
+    }
+    .toast.success {
+      display: flex;
+      background: rgba(184,145,58,0.1);
+      border: 1px solid rgba(184,145,58,0.3);
+      color: var(--ink);
+    }
+    .toast.error {
+      display: flex;
+      background: rgba(180,40,40,0.07);
+      border: 1px solid rgba(180,40,40,0.25);
+      color: #8b1a1a;
+    }
+    .toast-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* Spinner */
+    .spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+    .loading .btn-text { display: none; }
+    .loading .spinner { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrap">
+
+    <div class="eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Free Mortgage Assessment</span>
+      <div class="eyebrow-line"></div>
+    </div>
+
+    <h1>Let's find your<br><em>ideal mortgage.</em></h1>
+    <p class="subtitle">Answer a few quick questions and we'll be in touch within one business day with a personalised recommendation.</p>
+
+    <div id="toast" class="toast">
+      <span class="toast-icon" id="toastIcon">✓</span>
+      <span id="toastMsg"></span>
+    </div>
+
+    <div class="card" id="formCard">
+      <div class="form-grid">
+
+        <!-- Personal -->
+        <div class="section-divider"><span>Your Details</span></div>
+
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="name" placeholder="Jane Smith" required />
+        </div>
+
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="jane@email.com" required />
+        </div>
+
+        <div class="field full">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="+1 555 000 0000" required />
+        </div>
+
+        <!-- Financial -->
+        <div class="section-divider"><span>Financial Snapshot</span></div>
+
+        <div class="field">
+          <label>Available Deposit</label>
+          <div class="select-wrap">
+            <select id="deposit">
+              <option value="" disabled selected>Select range</option>
+              <option>Under $10,000</option>
+              <option>$10,000 – $25,000</option>
+              <option>$25,000 – $50,000</option>
+              <option>$50,000 – $100,000</option>
+              <option>$100,000 – $200,000</option>
+              <option>$200,000+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Income Type</label>
+          <div class="select-wrap">
+            <select id="income_type">
+              <option value="" disabled selected>Select type</option>
+              <option>Employed (PAYE)</option>
+              <option>Self-Employed</option>
+              <option>Contractor</option>
+              <option>Business Owner</option>
+              <option>Retired / Pension</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Credit Profile</label>
+          <div class="select-wrap">
+            <select id="credit">
+              <option value="" disabled selected>Select profile</option>
+              <option>Excellent – No issues</option>
+              <option>Good – Minor issues</option>
+              <option>Fair – Some defaults</option>
+              <option>Poor – Significant issues</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Purchase Timeline</label>
+          <div class="select-wrap">
+            <select id="timeline">
+              <option value="" disabled selected>Select timeline</option>
+              <option>ASAP (0–3 months)</option>
+              <option>3–6 months</option>
+              <option>6–12 months</option>
+              <option>12+ months</option>
+              <option>Just exploring</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="submit-row">
+          <button type="submit" id="submitBtn" onclick="handleSubmit(event)">
+            <span class="btn-text">Request My Free Assessment</span>
+            <div class="spinner"></div>
+          </button>
+          <p class="privacy">🔒 Your information is kept private and never sold. <a href="#">Privacy Policy</a></p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ─────────────────────────────────────────────
+    // CONFIGURATION — update these before deploying
+    // ─────────────────────────────────────────────
+    const AIRTABLE_WEBHOOK_URL = 'https://hooks.airtable.com/workflows/v1/genericWebhook/appoHZlthmPG1UF9v/wflNiVAThNj0l4aRQ/wtrfxsEEyqEs9ehez';
+    // If using Make.com webhook: paste your Make scenario webhook URL above.
+    // If using Airtable directly via API, see the README comment at bottom.
+    // ─────────────────────────────────────────────
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+
+      const name        = document.getElementById('name').value.trim();
+      const email       = document.getElementById('email').value.trim();
+      const phone       = document.getElementById('phone').value.trim();
+      const deposit     = document.getElementById('deposit').value;
+      const income_type = document.getElementById('income_type').value;
+      const credit      = document.getElementById('credit').value;
+      const timeline    = document.getElementById('timeline').value;
+
+      // Basic validation
+      if (!name || !email || !phone) {
+        showToast('error', 'Please fill in your name, email, and phone number.');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast('error', 'Please enter a valid email address.');
+        return;
+      }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.classList.add('loading');
+      hideToast();
+
+      const payload = {
+          Name:        name,
+          Email:       email,
+          Phone:       phone,
+          Deposit:     deposit     || '',
+          IncomeType:  income_type || '',
+          Credit:      credit      || '',
+          Timeline:    timeline    || '',
+          SubmittedAt: new Date().toISOString(),
+          Source:      document.referrer || 'Direct'
+      };
+
+      try {
+        const res = await fetch(AIRTABLE_WEBHOOK_URL, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error(`Server responded ${res.status}`);
+
+        // Success — hide form, show confirmation
+        document.getElementById('formCard').style.display = 'none';
+        showToast('success', '✅  Thank you, ' + name.split(' ')[0] + '! We\'ll be in touch within one business day.');
+
+      } catch (err) {
+        console.error(err);
+        showToast('error', 'Something went wrong. Please try again or call us directly.');
+        btn.disabled = false;
+        btn.classList.remove('loading');
+      }
+    }
+
+    function showToast(type, msg) {
+      const toast = document.getElementById('toast');
+      toast.className = 'toast ' + type;
+      document.getElementById('toastMsg').textContent = msg;
+      document.getElementById('toastIcon').textContent = type === 'success' ? '✓' : '✕';
+      toast.style.display = 'flex';
+      toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    function hideToast() {
+      document.getElementById('toast').style.display = 'none';
+    }
+  </script>
+
+  <!--
+  ══════════════════════════════════════════════
+  INTEGRATION GUIDE
+  ══════════════════════════════════════════════
+
+  OPTION A — Make.com (Recommended for your stack)
+  ──────────────────────────────────────────────
+  1. In Make.com, create a new scenario
+  2. Add a Webhooks > Custom Webhook trigger
+  3. Copy the webhook URL → paste into AIRTABLE_WEBHOOK_URL above
+  4. Add an Airtable > Create a Record module
+  5. Map the fields from the webhook payload (fields.Name, fields.Email, etc.)
+  6. Done — Make handles the Airtable connection & any downstream automations
+
+  OPTION B — Airtable Automations (No Make needed)
+  ──────────────────────────────────────────────
+  1. In your Airtable base, go to Automations → Create automation
+  2. Trigger: "When webhook received" → copy the URL
+  3. Paste into AIRTABLE_WEBHOOK_URL above
+  4. Note: Airtable webhook automations expect a flat JSON body,
+     so change payload to just: { name, email, phone, deposit, ... }
+     (remove the { fields: { ... } } wrapper)
+
+  OPTION C — Direct Airtable REST API (no webhook)
+  ──────────────────────────────────────────────
+  Replace the fetch call with:
+    fetch(`https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer YOUR_AIRTABLE_PAT',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+  ⚠️  Only do this if the page is password-protected — the API key
+      will be visible in the browser source otherwise.
+
+  NETLIFY DEPLOYMENT
+  ──────────────────────────────────────────────
+  netlify deploy --prod --dir .
+  (or drag-and-drop the folder into the Netlify dashboard)
+  -->
+</body>
+</html>
