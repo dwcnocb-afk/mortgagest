@@ -322,19 +322,9 @@
         <!-- Financial -->
         <div class="section-divider"><span>Financial Snapshot</span></div>
 
-        <div class="field">
+       <div class="field">
           <label>Available Deposit</label>
-          <div class="select-wrap">
-            <select id="deposit">
-              <option value="" disabled selected>Select range</option>
-              <option>Under $10,000</option>
-              <option>$10,000 – $25,000</option>
-              <option>$25,000 – $50,000</option>
-              <option>$50,000 – $100,000</option>
-              <option>$100,000 – $200,000</option>
-              <option>$200,000+</option>
-            </select>
-          </div>
+          <input type="text" id="deposit" placeholder="e.g. 25,000" />
         </div>
 
         <div class="field">
@@ -367,17 +357,8 @@
         </div>
 
         <div class="field">
-          <label>Purchase Timeline</label>
-          <div class="select-wrap">
-            <select id="timeline">
-              <option value="" disabled selected>Select timeline</option>
-              <option>ASAP (0–3 months)</option>
-              <option>3–6 months</option>
-              <option>6–12 months</option>
-              <option>12+ months</option>
-              <option>Just exploring</option>
-            </select>
-          </div>
+            <label>Purchase Timeline</label>
+            <input type="number" id="timeline" placeholder="number of months" min="0" />
         </div>
 
         <div class="submit-row">
@@ -397,7 +378,7 @@
     // ─────────────────────────────────────────────
     // CONFIGURATION — update these before deploying
     // ─────────────────────────────────────────────
-    const AIRTABLE_WEBHOOK_URL = 'https://hooks.airtable.com/workflows/v1/genericWebhook/appoHZlthmPG1UF9v/wfl2BzD4GCGIGqXVx/wtrydiTaigPP0cYH3';
+    const AIRTABLE_WEBHOOK_URL = 'https://hooks.airtable.com/workflows/v1/genericWebhook/appoHZlthmPG1UF9v/wflNiVAThNj0l4aRQ/wtrfxsEEyqEs9ehez';
     // If using Make.com webhook: paste your Make scenario webhook URL above.
     // If using Airtable directly via API, see the README comment at bottom.
     // ─────────────────────────────────────────────
