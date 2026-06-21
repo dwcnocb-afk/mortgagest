@@ -376,11 +376,13 @@
 
   <script>
     // ─────────────────────────────────────────────
-    // CONFIGURATION — update these before deploying
+    // CONFIGURATION
     // ─────────────────────────────────────────────
-    const AIRTABLE_WEBHOOK_URL = 'https://hooks.airtable.com/workflows/v1/genericWebhook/appoHZlthmPG1UF9v/wflNiVAThNj0l4aRQ/wtrfxsEEyqEs9ehez';
-    // If using Make.com webhook: paste your Make scenario webhook URL above.
-    // If using Airtable directly via API, see the README comment at bottom.
+    // This now posts to our OWN Vercel serverless function (/api/submit-lead),
+    // which forwards the data to Airtable server-side. This avoids the
+    // browser CORS block you'd hit calling hooks.airtable.com directly,
+    // and keeps the real webhook URL out of public page source.
+    const SUBMIT_ENDPOINT = '/api/submit-lead';
     // ─────────────────────────────────────────────
 
     async function handleSubmit(e) {
@@ -413,16 +415,16 @@
           Name:        name,
           Email:       email,
           Phone:       phone,
-          Deposit:     deposit     || '',
+          Deposit:     deposit ? Number(deposit.replace(/[^0-9.]/g, '')) || 0 : 0,
           IncomeType:  income_type || '',
           Credit:      credit      || '',
           Timeline:    timeline    || '',
           SubmittedAt: new Date().toISOString(),
-          Source:      document.referrer || 'Direct'
+          source:      document.referrer || 'Direct'
       };
 
       try {
-        const res = await fetch(AIRTABLE_WEBHOOK_URL, {
+        const res = await fetch(SUBMIT_ENDPOINT, {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(payload)
@@ -457,45 +459,34 @@
 
   <!--
   ══════════════════════════════════════════════
-  INTEGRATION GUIDE
+  INTEGRATION — Vercel + Serverless Proxy
   ══════════════════════════════════════════════
+  This form posts to /api/submit-lead (a Vercel Serverless Function
+  living at /api/submit-lead.js in this same project), which then
+  forwards the data server-side to the Airtable Workflow webhook.
 
-  OPTION A — Make.com (Recommended for your stack)
-  ──────────────────────────────────────────────
-  1. In Make.com, create a new scenario
-  2. Add a Webhooks > Custom Webhook trigger
-  3. Copy the webhook URL → paste into AIRTABLE_WEBHOOK_URL above
-  4. Add an Airtable > Create a Record module
-  5. Map the fields from the webhook payload (fields.Name, fields.Email, etc.)
-  6. Done — Make handles the Airtable connection & any downstream automations
+  Why a proxy instead of calling Airtable directly from this page?
+  - Browsers block reading the response from hooks.airtable.com due to
+    missing CORS headers on Airtable's side (not something you can fix
+    from your end) — the proxy avoids that since the browser only ever
+    talks to your own domain.
+  - It also keeps the real Airtable webhook URL out of public page
+    source.
 
-  OPTION B — Airtable Automations (No Make needed)
+  DEPLOYING ON VERCEL
   ──────────────────────────────────────────────
-  1. In your Airtable base, go to Automations → Create automation
-  2. Trigger: "When webhook received" → copy the URL
-  3. Paste into AIRTABLE_WEBHOOK_URL above
-  4. Note: Airtable webhook automations expect a flat JSON body,
-     so change payload to just: { name, email, phone, deposit, ... }
-     (remove the { fields: { ... } } wrapper)
+  1. Make sure this file and /api/submit-lead.js are both in your
+     GitHub repo (api/submit-lead.js must stay in an /api folder at
+     the project root — Vercel auto-detects it as a serverless route).
+  2. Push to GitHub.
+  3. In Vercel: import the repo (or it'll auto-redeploy if already
+     connected). No extra config needed — static HTML + /api functions
+     deploy automatically.
+  4. Test by submitting the form on your live Vercel URL and checking
+     the sampletable table in Airtable for the new record.
 
-  OPTION C — Direct Airtable REST API (no webhook)
-  ──────────────────────────────────────────────
-  Replace the fetch call with:
-    fetch(`https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer YOUR_AIRTABLE_PAT',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
-  ⚠️  Only do this if the page is password-protected — the API key
-      will be visible in the browser source otherwise.
-
-  NETLIFY DEPLOYMENT
-  ──────────────────────────────────────────────
-  netlify deploy --prod --dir .
-  (or drag-and-drop the folder into the Netlify dashboard)
+  If you ever rotate/regenerate the Airtable webhook URL, update it in
+  ONE place only: AIRTABLE_WEBHOOK_URL inside /api/submit-lead.js.
   -->
 </body>
 </html>
